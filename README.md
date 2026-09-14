@@ -13,11 +13,9 @@ No terminal, dentro da pasta que contém `package.json`:
 ```bash
 npm ci
 npm start
-```
 
-Abra http://localhost:4200 no navegador. Para encerrar, pressione Ctrl+C no terminal.
-
-Não é necessário instalar o Angular CLI globalmente. No PowerShell, caso `npm` seja bloqueado pela política de scripts, use `npm.cmd ci` e `npm.cmd start`.
+Depois de executar npm start, abra http://127.0.0.1:4200/ no navegador. Para encerrar, pressione Ctrl+C no terminal.
+Não é necessário instalar o Angular CLI globalmente. No PowerShell, caso npm seja bloqueado pela política de scripts, use npm.cmd ci e npm.cmd start.
 
 ## Funcionamento
 
