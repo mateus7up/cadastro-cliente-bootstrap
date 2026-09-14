@@ -1,0 +1,267 @@
+<main class="container py-4">
+  <section class="card">
+    <div class="card-body p-4">
+      <h1 class="h4 mb-2">Formulário de Cadastro de Cliente</h1>
+      <p class="text-secondary mb-4">
+        O seguinte cadastro será utilizado em Vendas e Ordens de Serviço
+      </p>
+
+      <form
+        [formGroup]="formularioCliente"
+        (ngSubmit)="salvarCliente()"
+        (input)="mensagemSucesso = ''"
+        novalidate
+      >
+        <div class="row g-3">
+          <div class="col-md-6 col-xl-4">
+            <div class="form-floating">
+              <input
+                class="form-control"
+                type="text"
+                id="nome"
+                formControlName="nome"
+                placeholder="Nome"
+                minlength="3"
+                maxlength="50"
+                autocomplete="name"
+                [class.is-invalid]="campoInvalido('nome')"
+                [attr.aria-invalid]="campoInvalido('nome')"
+                aria-describedby="nome-erro"
+                required
+              />
+              <label for="nome">Nome: *</label>
+            </div>
+            @if (campoInvalido('nome')) {
+              <div id="nome-erro" class="invalid-feedback d-block">
+                Informe um nome entre 3 e 50 caracteres.
+              </div>
+            }
+          </div>
+          <div class="col-md-6 col-xl-2">
+            <div class="form-floating">
+              <select
+                class="form-select"
+                id="tipoPessoa"
+                formControlName="tipoPessoa"
+                (change)="alterarTipoPessoa()"
+                [class.is-invalid]="campoInvalido('tipoPessoa')"
+                [attr.aria-invalid]="campoInvalido('tipoPessoa')"
+                aria-describedby="tipoPessoa-erro"
+                required
+              >
+                <option value="" disabled>Selecione</option>
+                @for (tipo of tipoPessoaOptions; track tipo.valor) {
+                  <option [value]="tipo.valor">{{ tipo.descricao }}</option>
+                }
+              </select>
+              <label for="tipoPessoa">Tipo de Pessoa: *</label>
+            </div>
+            @if (campoInvalido('tipoPessoa')) {
+              <div id="tipoPessoa-erro" class="invalid-feedback d-block">
+                Selecione o tipo de pessoa.
+              </div>
+            }
+          </div>
+          <div class="col-md-6 col-xl-2">
+            <div class="form-floating">
+              <input
+                class="form-control"
+                type="text"
+                id="cpfCnpj"
+                formControlName="cpfCnpj"
+                placeholder="{{ pessoaJuridica ? 'CNPJ' : 'CPF' }}"
+                inputmode="numeric"
+                [maxlength]="pessoaJuridica ? 18 : 14"
+                (input)="aplicarMascara('cpfCnpj', $event)"
+                [class.is-invalid]="campoInvalido('cpfCnpj')"
+                [attr.aria-invalid]="campoInvalido('cpfCnpj')"
+                aria-describedby="cpfCnpj-erro"
+                required
+              />
+              <label for="cpfCnpj">{{ pessoaJuridica ? 'CNPJ' : 'CPF' }}: *</label>
+            </div>
+            @if (campoInvalido('cpfCnpj')) {
+              <div id="cpfCnpj-erro" class="invalid-feedback d-block">
+                {{
+                  pessoaJuridica
+                    ? 'Informe os 14 dígitos do CNPJ.'
+                    : 'Informe os 11 dígitos do CPF.'
+                }}
+              </div>
+            }
+          </div>
+          <div class="col-md-6 col-xl-2">
+            <div class="form-floating">
+              <input
+                class="form-control"
+                type="tel"
+                id="telefone"
+                formControlName="telefone"
+                placeholder="Telefone"
+                maxlength="15"
+                autocomplete="tel-national"
+                (input)="aplicarMascara('telefone', $event)"
+                [class.is-invalid]="campoInvalido('telefone')"
+                [attr.aria-invalid]="campoInvalido('telefone')"
+                aria-describedby="telefone-erro"
+                required
+              />
+              <label for="telefone">Telefone: *</label>
+            </div>
+            @if (campoInvalido('telefone')) {
+              <div id="telefone-erro" class="invalid-feedback d-block">
+                Informe o telefone com DDD (10 ou 11 dígitos).
+              </div>
+            }
+          </div>
+          <div class="col-md-6 col-xl-2">
+            <div class="form-floating">
+              <input
+                class="form-control"
+                type="text"
+                id="cep"
+                formControlName="cep"
+                placeholder="CEP"
+                inputmode="numeric"
+                maxlength="9"
+                autocomplete="postal-code"
+                (input)="aplicarMascara('cep', $event)"
+                [class.is-invalid]="campoInvalido('cep')"
+                [attr.aria-invalid]="campoInvalido('cep')"
+                aria-describedby="cep-erro"
+                required
+              />
+              <label for="cep">CEP: *</label>
+            </div>
+            @if (campoInvalido('cep')) {
+              <div id="cep-erro" class="invalid-feedback d-block">Informe os 8 dígitos do CEP.</div>
+            }
+          </div>
+        </div>
+        <div class="row g-3 mt-1">
+          <div class="col-md-6 col-xl-3">
+            <div class="form-floating">
+              <input
+                class="form-control"
+                type="text"
+                id="cidade"
+                formControlName="cidade"
+                placeholder="Cidade"
+                autocomplete="address-level2"
+                [class.is-invalid]="campoInvalido('cidade')"
+                [attr.aria-invalid]="campoInvalido('cidade')"
+                aria-describedby="cidade-erro"
+                required
+              />
+              <label for="cidade">Cidade: *</label>
+            </div>
+            @if (campoInvalido('cidade')) {
+              <div id="cidade-erro" class="invalid-feedback d-block">Informe a cidade.</div>
+            }
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="form-floating">
+              <input
+                class="form-control"
+                type="text"
+                id="logradouro"
+                formControlName="logradouro"
+                placeholder="Endereço"
+                autocomplete="address-line1"
+                [class.is-invalid]="campoInvalido('logradouro')"
+                [attr.aria-invalid]="campoInvalido('logradouro')"
+                aria-describedby="logradouro-erro"
+                required
+              />
+              <label for="logradouro">Endereço: *</label>
+            </div>
+            @if (campoInvalido('logradouro')) {
+              <div id="logradouro-erro" class="invalid-feedback d-block">Informe o endereço.</div>
+            }
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="form-floating">
+              <input
+                class="form-control"
+                type="text"
+                id="bairro"
+                formControlName="bairro"
+                placeholder="Bairro"
+                autocomplete="address-level3"
+                [class.is-invalid]="campoInvalido('bairro')"
+                [attr.aria-invalid]="campoInvalido('bairro')"
+                aria-describedby="bairro-erro"
+                required
+              />
+              <label for="bairro">Bairro: *</label>
+            </div>
+            @if (campoInvalido('bairro')) {
+              <div id="bairro-erro" class="invalid-feedback d-block">Informe o bairro.</div>
+            }
+          </div>
+          <div class="col-md-6 col-xl-2">
+            <div class="form-floating">
+              <input
+                class="form-control"
+                type="text"
+                id="numero"
+                formControlName="numero"
+                placeholder="Número"
+                [class.is-invalid]="campoInvalido('numero')"
+                [attr.aria-invalid]="campoInvalido('numero')"
+                aria-describedby="numero-erro"
+                required
+              />
+              <label for="numero">Número: *</label>
+            </div>
+            @if (campoInvalido('numero')) {
+              <div id="numero-erro" class="invalid-feedback d-block">Informe o número ou S/N.</div>
+            }
+          </div>
+        </div>
+        <div class="row g-3 mt-1">
+          <div class="col-12">
+            <div class="form-floating">
+              <input
+                class="form-control"
+                type="email"
+                id="email"
+                formControlName="email"
+                placeholder="Email"
+                autocomplete="email"
+                [class.is-invalid]="campoInvalido('email')"
+                [attr.aria-invalid]="campoInvalido('email')"
+                aria-describedby="email-erro"
+                required
+              />
+              <label for="email">Email: *</label>
+            </div>
+            @if (campoInvalido('email')) {
+              <div id="email-erro" class="invalid-feedback d-block">Informe um email válido.</div>
+            }
+          </div>
+        </div>
+
+        <p class="text-secondary small mt-3 mb-0">* Campos obrigatórios</p>
+
+        @if (mensagemErro) {
+          <div class="alert alert-danger mt-3 mb-0" role="alert">{{ mensagemErro }}</div>
+        }
+        @if (mensagemSucesso) {
+          <div class="alert alert-success mt-3 mb-0" role="status">{{ mensagemSucesso }}</div>
+        }
+
+        <div class="row g-3 mt-2">
+          <div class="col-12 col-md-3">
+            <button type="submit" class="btn btn-success w-100">Salvar</button>
+          </div>
+          <div class="col-12 col-md-3">
+            <button type="button" class="btn btn-danger w-100" (click)="cancelar()">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
