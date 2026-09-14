@@ -1,0 +1,13 @@
+Requisitos:
+Node.js 24 LTS (24.15 ou superior) e npm.
+
+Dentro da pasta do projeto:
+npm ci                         Instala as dependências do package-lock.json.
+npm start                      Executa em http://localhost:4200.
+npm run build                  Gera a versão de produção.
+npm test -- --watch=false      Executa os testes uma vez.
+
+No PowerShell, se necessário, use npm.cmd no lugar de npm.
+
+O Bootstrap substitui os componentes visuais do PrimeNG.
+O Angular CLI é uma dependência local; não precisa de instalação global.
